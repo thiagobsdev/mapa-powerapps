@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Interativo</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZN1AoalhJFcYMpyWhw9EpVWk8SKXZSzc&callback=initMap" async defer></script>
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { width: 100vw; height: 100vh; }
+    </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<script>
+    function initMap() {
+        var initialPosition = { lat: -23.5505, lng: -46.6333 }; // Posição inicial (São Paulo)
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: initialPosition,
+            zoom: 14
+        });
+
+        var marker = new google.maps.Marker({
+            position: initialPosition,
+            map: map,
+            draggable: true // Permite arrastar o marcador
+        });
+
+        marker.addListener('dragend', function () {
+            var newPosition = marker.getPosition();
+            var lat = newPosition.lat();
+            var lng = newPosition.lng();
+            
+            // Envia os dados para o Power Apps
+            window.parent.postMessage({ lat: lat, lng: lng }, "*");
+        });
+    }
+</script>
+
+</body>
+</html>
